@@ -45,6 +45,7 @@ public class TorchSwitch extends BroadcastReceiver {
         //
         // Unload intent extras if they exist:
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        boolean notification = intent.getBooleanExtra("notification", true);
         boolean bright = intent.getBooleanExtra("bright", prefs.getBoolean("bright", false));
         boolean strobe = intent.getBooleanExtra("strobe", prefs.getBoolean("strobe", false));
         int period = intent.getIntExtra("period", 200);
@@ -54,12 +55,14 @@ public class TorchSwitch extends BroadcastReceiver {
             if (this.torchServiceRunning(context)) {
                 context.stopService(i);
             } else {
+                i.putExtra("notification", notification);
                 i.putExtra("bright", bright);
                 i.putExtra("strobe", strobe);
                 i.putExtra("period", period);
                 context.startService(i);
             }
         } else if (action.equals(FLASHLIGHT_ON)) {
+            i.putExtra("notification", notification);
             i.putExtra("bright", bright);
             i.putExtra("strobe", strobe);
             i.putExtra("period", period);
