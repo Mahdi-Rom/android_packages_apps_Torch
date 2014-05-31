@@ -115,6 +115,7 @@ public class TorchService extends Service {
                     .build();
             // Starting sticky, safe to omit if we aren't showing a notification
             startForeground(getString(R.string.app_name).hashCode(), notification);
+            updateState(true);
         }
 
         return START_STICKY;
