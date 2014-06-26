@@ -31,6 +31,7 @@
 
     <string name="label_high">Максимальная яркость</string>
     <string name="label_strobe">Стробоскоп</string>
+    <string name="label_screen_off">Тушить фонарик вместе с экраном</string>
 
     <string name="widget_options">Настройки виджета</string>
     <string name="setting_widget_bright">Максимальная яркость</string>
@@ -41,4 +42,5 @@
 
     <string name="not_torch_title">Фонарик включён</string>
     <string name="not_torch_toggle">Выключить фонарик</string>
+    <string name="error_connect_camera">Фонарик отключен.\nНевозможно подключиться к интерфейсу камеры.</string>
 </resources>

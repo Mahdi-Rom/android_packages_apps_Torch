@@ -27,6 +27,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.UserHandle;
 import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -48,9 +49,11 @@ public class MainActivity extends Activity {
     private ToggleButton mButtonOn;
     private Switch mStrobeSwitch;
     private Switch mBrightSwitch;
+    private Switch mScreenOffSwitch;
 
     private boolean mBright;
     private boolean mTorchOn;
+    private boolean mScreenOff;
 
     // Strobe frequency slider.
     private SeekBar mSlider;
@@ -88,6 +91,7 @@ public class MainActivity extends Activity {
         mStrobeLabel = (TextView) findViewById(R.id.strobeTimeLabel);
         mSlider = (SeekBar) findViewById(R.id.slider);
         mBrightSwitch = (Switch) findViewById(R.id.bright_switch);
+        mScreenOffSwitch = (Switch) findViewById(R.id.screen_off_switch);
 
         mStrobePeriod = 100;
         mTorchOn = false;
@@ -118,7 +122,7 @@ public class MainActivity extends Activity {
         } else {
             // Fully hide the UI elements on Crespo since we can't use them
             mBrightSwitch.setVisibility(View.GONE);
-            findViewById(R.id.ruler2).setVisibility(View.GONE);
+            findViewById(R.id.ruler3).setVisibility(View.GONE);
         }
 
         // Set the state of the strobing section and hide as appropriate
@@ -137,6 +141,21 @@ public class MainActivity extends Activity {
             }
         });
 
+        // Preference to adjust if screen turning off automatically turns off torch
+        mScreenOff = mPrefs.getBoolean("screenOff", false);
+        mScreenOffSwitch.setChecked(mScreenOff);
+        mScreenOffSwitch.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    mScreenOff = true;
+                } else {
+                    mScreenOff = false;
+                }
+                mPrefs.edit().putBoolean("screenOff", mScreenOff).commit();
+            }
+        });
+
         mButtonOn.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -144,7 +163,7 @@ public class MainActivity extends Activity {
                 intent.putExtra("strobe", mStrobeSwitch.isChecked());
                 intent.putExtra("period", mStrobePeriod);
                 intent.putExtra("bright", mBright);
-                sendBroadcast(intent);
+                sendBroadcastAsUser(intent, new UserHandle(UserHandle.USER_CURRENT));
             }
         });
 
@@ -161,7 +180,7 @@ public class MainActivity extends Activity {
 
                 Intent intent = new Intent("net.cactii.flash2.SET_STROBE");
                 intent.putExtra("period", mStrobePeriod);
-                sendBroadcast(intent);
+                sendBroadcastAsUser(intent, new UserHandle(UserHandle.USER_CURRENT));
             }
 
             @Override
@@ -265,6 +284,7 @@ public class MainActivity extends Activity {
         mButtonOn.setChecked(mTorchOn);
         mBrightSwitch.setEnabled(!mTorchOn && mHasBrightSetting);
         mStrobeSwitch.setEnabled(!mTorchOn);
+        mScreenOffSwitch.setEnabled(!mTorchOn);
         mSlider.setEnabled(!mTorchOn || mStrobeSwitch.isChecked());
     }
 }

@@ -48,6 +48,9 @@ public class TorchSwitch extends BroadcastReceiver {
         boolean notification = intent.getBooleanExtra("notification", true);
         boolean bright = intent.getBooleanExtra("bright", prefs.getBoolean("bright", false));
         boolean strobe = intent.getBooleanExtra("strobe", prefs.getBoolean("strobe", false));
+        boolean screenOff = intent.getBooleanExtra("screenOff",
+                prefs.getBoolean("screenOff", false));
+
         int period = intent.getIntExtra("period", 200);
 
         Intent i = new Intent(context, TorchService.class);
@@ -59,6 +62,7 @@ public class TorchSwitch extends BroadcastReceiver {
                 i.putExtra("bright", bright);
                 i.putExtra("strobe", strobe);
                 i.putExtra("period", period);
+                i.putExtra("screenOff", screenOff);
                 context.startService(i);
             }
         } else if (action.equals(FLASHLIGHT_ON)) {
@@ -66,6 +70,7 @@ public class TorchSwitch extends BroadcastReceiver {
             i.putExtra("bright", bright);
             i.putExtra("strobe", strobe);
             i.putExtra("period", period);
+            i.putExtra("screenOff", screenOff);
             context.startService(i);
         } else if (action.equals(FLASHLIGHT_OFF)) {
             context.stopService(i);
