@@ -31,6 +31,7 @@
 
     <string name="label_high">Hohe Helligkeit</string>
     <string name="label_strobe">Stroboskop</string>
+    <string name="label_screen_off">Taschenlampe bei Bildschirm aus beenden</string>
 
     <string name="widget_options">Allgemeine Optionen</string>
     <string name="setting_widget_bright">Helles Widget</string>
